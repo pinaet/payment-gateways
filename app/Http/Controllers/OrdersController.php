@@ -30,7 +30,6 @@ class OrdersController extends Controller
         if (empty($payload['customer_email'])   ) $check = false;
         //        $payload['ref2']
         //        $payload['ref3']
-
         if( $check==false ) {
             dd('redirect to the page said not enough info to proceed order, back to merchant', $payload );
             return redirect(); //redirect to the page said not enough info to proceed order
@@ -52,13 +51,13 @@ class OrdersController extends Controller
                 $order['reference_order']       = $payload['reference_order'];
                 $order['customer_name']         = $payload['customer_name'];
                 $order['customer_email']        = $payload['customer_email'];
-                $order['source_type_id']        = '';
+                $order['source_type_id']        = null;
                 $order['source_type']           = '';
                 $order['status']                = 'p'; //pending
                 $order['ref']                   = $order['ref'];
                 $order['ref2']                  = $order['ref2'];
                 $order['ref3']                  = $order['ref3'];
-                $order['transaction_id']        = '';
+                $order['transaction_id']        = null;
                 $order['email_sent']            = 0;
 
                 $order->save();
@@ -73,13 +72,13 @@ class OrdersController extends Controller
                 $attributes['reference_order']  = $payload['reference_order'];
                 $attributes['customer_name']    = $payload['customer_name'];
                 $attributes['customer_email']   = $payload['customer_email'];
-                $attributes['source_type_id']   = '';
+                $attributes['source_type_id']   = null;
                 $attributes['source_type']      = '';
                 $attributes['status']           = 'p'; //pending
                 $attributes['ref']              = '';
                 $attributes['ref2']             = empty($payload['ref2']) == false ? $payload['ref2'] : '';
                 $attributes['ref3']             = empty($payload['ref3']) == false ? $payload['ref3'] : '';
-                $attributes['transaction_id']   = '';
+                $attributes['transaction_id']   = null;
                 $attributes['email_sent']       = 0;
 
                 $order                          = Order::create( $attributes );
@@ -89,7 +88,7 @@ class OrdersController extends Controller
 
             $endpoint       = Endpoint::find( $order['endpoint_id'] );
             $sourceTypes    = SourceType::all();
-            
+
             $gateConf       = config( 'gate' );
 
             return view( 'pages.order-index', [
@@ -114,7 +113,7 @@ class OrdersController extends Controller
         $order->source_type    = $order_temp['source_type'];
         $order->transaction_id = 0;
         $order->status         = 'p'; //pending
-        
+
         $order->save();
 
         return response('200 OK');
@@ -153,8 +152,8 @@ class OrdersController extends Controller
         return $order;
     }
 
-    /** 
-     * receive notify from payment node: 
+    /**
+     * receive notify from payment node:
      *      action when status='c': send_email and notify endpoint
      * */
     public function notify()
@@ -211,7 +210,7 @@ class OrdersController extends Controller
         <input type="hidden" name="pan"       		value="<?=$pan?>">
 		<input type="hidden" name="expdate"   		value="<?=$expdate?>">
         <input type="hidden" name="transaction_id"  value="<?=$transaction_id?>">
-        
+
          * data:
             "transaction_id":58,
             "ref":"1.12345",
@@ -222,12 +221,12 @@ class OrdersController extends Controller
             "reference_order":"12345",
             "payment_status":"completed",
          */
-        
+
         $data['response_code']   = request()->response_code;
-        $data['reference_order'] = request()->reference_order; 
+        $data['reference_order'] = request()->reference_order;
         $data['pan']             = request()->pan;
-        $data['transaction_id']  = request()->transaction_id;        
-        
+        $data['transaction_id']  = request()->transaction_id;
+
         /** log create */
         $attributes['type'] = 'callback - tbank';
         $attributes['log2'] = json_encode( $data );
@@ -295,7 +294,7 @@ class OrdersController extends Controller
     /** for testing: perform as an endpoint */
     public function endpoint()
     {
-        /** 
+        /**
          * simulate request from endpoint
          */
         //exchange data using json

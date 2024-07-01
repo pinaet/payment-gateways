@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
 use App\Endpoint;
@@ -15,7 +17,7 @@ class EndpointSeeder extends Seeder
     {
         Endpoint::truncate();
 
-        if( config('gate.mode')=='gate-dev' )
+        if( config('gate.mode')!='gate' )
         {
             //id=1
             $attributes['endpoint_type_id'] = 2;//form
@@ -29,7 +31,7 @@ class EndpointSeeder extends Seeder
             $attributes['cost_per_unit']    = 1;
             $attributes['pay_url']          = 'https://histest.harrowschool.ac.th/gate/public/order';
             $attributes['charge_fee']       = 'y';
-            
+
             Endpoint::create( $attributes );
 
             //id=2
@@ -45,7 +47,7 @@ class EndpointSeeder extends Seeder
             $attributes['pay_url']          = 'https://histest.harrowschool.ac.th/gate/public/order';
             $attributes['charge_fee']       = 'y';
             Endpoint::create( $attributes );
-            
+
             //id=3
             $attributes['endpoint_type_id'] = 2;//form
             $attributes['name']             = 'Application Fee';
@@ -103,7 +105,7 @@ class EndpointSeeder extends Seeder
             $attributes['pay_url']          = 'https://applications.harrowschool.ac.th/gate/public/order';
             $attributes['charge_fee']       = 'y';
             Endpoint::create( $attributes );
-            
+
             //id=2
             $attributes['endpoint_type_id'] = 1;//school
             $attributes['name']             = 'Tuition Fee';
@@ -117,7 +119,7 @@ class EndpointSeeder extends Seeder
             $attributes['pay_url']          = 'https://applications.harrowschool.ac.th/gate/public/order';
             $attributes['charge_fee']       = 'y';
             Endpoint::create( $attributes );
-            
+
             //id=3
             $attributes['endpoint_type_id'] = 2;//form
             $attributes['name']             = 'Application Fee';

@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Endpoint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class AddNewEndpoint5 extends Migration
 {
@@ -14,6 +16,9 @@ class AddNewEndpoint5 extends Migration
     public function up()
     {
         Artisan::call('db:seed', ['--class' => 'EndpointSeeder', '--force' => true,]);
+        $endpoint             = Endpoint::find(4); //Christmas Programme
+        $endpoint->charge_fee = 'n';
+        $endpoint->save();
     }
 
     /**

@@ -1,10 +1,11 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\SourceType;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-use App\SourceType;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateSourceTypesTable extends Migration
 {
@@ -15,19 +16,36 @@ class CreateSourceTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('source_types', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('source_type')->nullable();
-            $table->decimal('rate', 4, 4);//0.013
-            $table->string('bank')->nullable();
-            $table->string('name')->nullable();
-            $table->string('description')->nullable();
-            $table->string('dest_url')->nullable();
-            $table->timestamps();
-        });
+        $database_type = env('DB_CONNECTION','mysql');
+        if($database_type!='mysql')
+        {
+            Schema::create('source_types', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('source_type')->nullable();
+                $table->decimal('rate', 4, 4);//0.013
+                $table->string('bank')->nullable();
+                $table->string('name')->nullable();
+                $table->string('description')->nullable();
+                $table->string('dest_url')->nullable();
+                $table->timestamps();
+            });
 
-        $sql = "ALTER TABLE source_types ALTER COLUMN dest_url NVARCHAR(MAX)";
-        DB::statement($sql);
+            $sql = "ALTER TABLE source_types ALTER COLUMN dest_url NVARCHAR(MAX)";
+            DB::statement($sql);
+        }
+        else
+        {
+            Schema::create('source_types', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('source_type')->nullable();
+                $table->decimal('rate', 4, 4);//0.013
+                $table->string('bank')->nullable();
+                $table->string('name')->nullable();
+                $table->string('description')->nullable();
+                $table->text('dest_url')->nullable();
+                $table->timestamps();
+            });
+        }
 
         $attributes['source_type']  = 'unionpay';//alipay //wechat
         $attributes['rate']         = 0.02;

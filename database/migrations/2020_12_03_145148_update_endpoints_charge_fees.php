@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-use App\Endpoint;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class UpdateEndpointsChargeFees extends Migration
 {
@@ -25,9 +25,6 @@ class UpdateEndpointsChargeFees extends Migration
             set charge_fee='y'
         ";
         DB::statement( $sql );
-        $endpoint             = Endpoint::find(4); //Christmas Programme
-        $endpoint->charge_fee = 'n';
-        $endpoint->save();
     }
 
     /**
